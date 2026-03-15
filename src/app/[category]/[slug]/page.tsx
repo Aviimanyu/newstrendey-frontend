@@ -5,15 +5,26 @@ export const dynamic = "force-dynamic"
 const API = process.env.NEXT_PUBLIC_WP_API
 
 async function getPost(slug: string) {
-  const res = await fetch(`${API}/posts?slug=${slug}`, {
-    cache: "no-store"
-  })
+  try {
+    const res = await fetch(`${API}/posts?slug=${slug}&_embed`, {
+      cache: "no-store"
+    })
 
-  const data = await res.json()
-  return data[0]
+    if (!res.ok) return null
+
+    const data = await res.json()
+
+    if (!data || data.length === 0) return null
+
+    return data[0]
+
+  } catch (error) {
+    return null
+  }
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
+
   const post = await getPost(params.slug)
 
   if (!post) return notFound()
