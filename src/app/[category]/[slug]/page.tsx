@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation"
 
+export const dynamic = "force-dynamic"
+
 const API = process.env.NEXT_PUBLIC_WP_API
 
 async function getPost(slug: string) {
@@ -11,10 +13,7 @@ async function getPost(slug: string) {
   return data[0]
 }
 
-export default async function Page(
-  { params }: { params: { slug: string } }
-) {
-
+export default async function Page({ params }: { params: { slug: string } }) {
   const post = await getPost(params.slug)
 
   if (!post) return notFound()
@@ -22,12 +21,7 @@ export default async function Page(
   return (
     <div style={{ maxWidth: "800px", margin: "40px auto" }}>
       <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-
-      <div
-        dangerouslySetInnerHTML={{
-          __html: post.content.rendered
-        }}
-      />
+      <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
     </div>
   )
 }
