@@ -11,7 +11,9 @@ async function getPost(slug: string) {
   return data[0]
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page(
+  { params }: { params: { slug: string } }
+) {
 
   const post = await getPost(params.slug)
 
@@ -20,7 +22,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <div style={{ maxWidth: "800px", margin: "40px auto" }}>
       <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-      <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+
+      <div
+        dangerouslySetInnerHTML={{
+          __html: post.content.rendered
+        }}
+      />
     </div>
   )
 }
